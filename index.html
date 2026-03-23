@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SplitPay — Открываю событие...</title>
+  <style>
+    body { font-family: -apple-system, sans-serif; background: #f5f5f5;
+      display: flex; justify-content: center; align-items: center;
+      min-height: 100vh; margin: 0; }
+    .container { text-align: center; padding: 20px; }
+    .spinner { border: 3px solid #f3f3f3; border-top: 3px solid #3498db;
+      border-radius: 50%; width: 40px; height: 40px;
+      animation: spin 1s linear infinite; margin: 20px auto; }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    .btn { background: #007bff; color: #fff; border: none;
+      padding: 12px 24px; font-size: 16px; border-radius: 8px;
+      cursor: pointer; margin: 8px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>SplitPay</h1>
+  <p>Открываю общее событие...</p>
+  <div class="spinner"></div>
+  <div id="store-buttons" style="display:none; margin-top:20px">
+    <p>Установите приложение, чтобы открыть событие:</p>
+    <button class="btn" id="ios-btn">📱 App Store</button>
+    <button class="btn" id="android-btn">🤖 Google Play</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  // ═══ ЗАМЕНИТЬ НА СВОИ ЗНАЧЕНИЯ ═══
+  const APP_SCHEME      = 'splitpay';           // URL-схема из FlutterFlow
+  const APP_HOST        = 'splitpay.com';       // hostname из FlutterFlow
+  const IOS_STORE_URL   = 'https://apps.apple.com/app/id[YOUR_APP_ID]';
+  const ANDROID_STORE_URL = 'https://play.google.com/store/apps/details?id=com.yourcompany.splitpay';
+  // ══════════════════════════════════
+
+  const currentPath = window.location.pathname + window.location.search;
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  const isAndroid = /android/i.test(navigator.userAgent);
+
+  document.getElementById('ios-btn').onclick = () => window.location.href = IOS_STORE_URL;
+  document.getElementById('android-btn').onclick = () => window.location.href = ANDROID_STORE_URL;
+
+  function showStoreButtons() {
+    document.querySelector('.spinner').style.display = 'none';
+    document.getElementById('store-buttons').style.display = 'block';
+  }
+
+  function tryOpenApp() {
+    // Строим deep link: splitpay://splitpay.com/event?id=abc123
+    const deepLink = `${APP_SCHEME}://${APP_HOST}${currentPath}`;
+
+    if (isIOS) {
+      window.location.href = deepLink;
+      setTimeout(showStoreButtons, 2500);
+    } else if (isAndroid) {
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      iframe.src = deepLink;
+      document.body.appendChild(iframe);
+      setTimeout(() => {
+        if (!document.hidden) showStoreButtons();
+        iframe.remove();
+      }, 2500);
+    } else {
+      // Desktop — показываем кнопки сразу
+      showStoreButtons();
+    }
+  }
+
+  setTimeout(tryOpenApp, 1200);
+})();
+</script>
+</body>
+</html>
