@@ -1,1 +1,14 @@
-
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": ["58TUZDJ3K7.com.mycompany.scnms"],
+        "components": [{ "/": "/*" }]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": ["TEAM_ID.com.yourcompany.splitpay"]
+  }
+}
