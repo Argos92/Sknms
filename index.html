@@ -20,14 +20,61 @@
 </head>
 <body>
 <div class="container">
-  <h1>Скинемся</h1>
+  <h1>SplitPay</h1>
   <p>Открываю общее событие...</p>
   <div class="spinner"></div>
   <div id="store-buttons" style="display:none; margin-top:20px">
     <p>Установите приложение, чтобы открыть событие:</p>
-    <a class="btn" href="redirect.html" id="btn">redirect</a>
+    <button class="btn" id="ios-btn">📱 App Store</button>
+    <button class="btn" id="android-btn">🤖 Google Play</button>
   </div>
 </div>
 
+<script>
+(function() {
+  // ═══ ЗАМЕНИТЬ НА СВОИ ЗНАЧЕНИЯ ═══
+  const APP_SCHEME      = 'sknms';           // URL-схема из FlutterFlow
+  const APP_HOST        = 'sknms.ru';       // hostname из FlutterFlow
+  const IOS_STORE_URL   = 'https://testflight.apple.com/join/Qvj8xae2';
+  const ANDROID_STORE_URL = 'https://play.google.com/store/apps/details?id=com.yourcompany.splitpay';
+  // ══════════════════════════════════
+
+  const currentPath = window.location.pathname + window.location.search;
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  const isAndroid = /android/i.test(navigator.userAgent);
+
+  document.getElementById('ios-btn').onclick = () => window.location.href = IOS_STORE_URL;
+  document.getElementById('android-btn').onclick = () => window.location.href = ANDROID_STORE_URL;
+
+  function showStoreButtons() {
+    document.querySelector('.spinner').style.display = 'none';
+    document.getElementById('store-buttons').style.display = 'block';
+  }
+
+  function tryOpenApp() {
+    // Строим deep link: splitpay://splitpay.com/event?id=abc123
+    const deepLink = `${APP_SCHEME}://${APP_HOST}${currentPath}`;
+
+    if (isIOS) {
+      window.location.href = deepLink;
+      setTimeout(showStoreButtons, 2500);
+    } else if (isAndroid) {
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      iframe.src = deepLink;
+      document.body.appendChild(iframe);
+      setTimeout(() => {
+        if (!document.hidden) showStoreButtons();
+        iframe.remove();
+      }, 2500);
+    } else {
+      // Desktop — показываем кнопки сразу
+      showStoreButtons();
+    }
+  }
+
+  setTimeout(tryOpenApp, 1200);
+})();
+</script>
 </body>
 </html>
