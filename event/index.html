@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>SplitPay — Открываю событие...</title>
+
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      text-align: center;
+      padding: 24px;
+      max-width: 420px;
+    }
+
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #007bff;
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      animation: spin 1s linear infinite;
+      margin: 24px auto;
+    }
+
+    @keyframes spin {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .btn {
+      background: #007bff;
+      color: #fff;
+      border: none;
+      padding: 14px 22px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 12px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .hint {
+      color: #666;
+      font-size: 14px;
+      margin-top: 16px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>SplitPay</h1>
+
+  <p>Открываю событие...</p>
+
+  <div class="spinner" id="spinner"></div>
+
+  <div id="fallback" class="hidden">
+
+    <p>Если приложение не открылось:</p>
+
+    <button class="btn" id="open-app-btn">
+      Открыть приложение
+    </button>
+
+    <button class="btn" id="store-btn">
+      Установить приложение
+    </button>
+
+    <div class="hint">
+      Если приложение установлено, нажмите
+      «Открыть приложение».
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+(function () {
+
+  // ════════════════════════════════
+  // НАСТРОЙКИ
+  // ════════════════════════════════
+
+  const IOS_APP_STORE_URL =
+    'https://testflight.apple.com/join/Qvj8xae2';
+
+  const ANDROID_PLAY_URL =
+    'https://play.google.com/store/apps/details?id=com.yourcompany.splitpay';
+
+  const ANDROID_PACKAGE =
+    'com.yourcompany.splitpay';
+
+  const DOMAIN =
+    'https://sknms.ru';
+
+  // ════════════════════════════════
+
+  const isIOS =
+    /iPad|iPhone|iPod/.test(navigator.userAgent) &&
+    !window.MSStream;
+
+  const isAndroid =
+    /android/i.test(navigator.userAgent);
+
+  const spinner =
+    document.getElementById('spinner');
+
+  const fallback =
+    document.getElementById('fallback');
+
+  const openAppBtn =
+    document.getElementById('open-app-btn');
+
+  const storeBtn =
+    document.getElementById('store-btn');
+
+  function showFallback() {
+
+    spinner.style.display = 'none';
+
+    fallback.classList.remove('hidden');
+  }
+
+  function getEventId() {
+
+    const params =
+      new URLSearchParams(window.location.search);
+
+    return params.get('id');
+  }
+
+  function buildUniversalLink() {
+
+    const eventId = getEventId();
+
+    return `${DOMAIN}/event?eventId=${eventId}`;
+  }
+
+  function buildAndroidIntentLink() {
+
+    const eventId = getEventId();
+
+    return (
+      `intent://event/${eventId}` +
+      `#Intent;scheme=https;` +
+      `package=${ANDROID_PACKAGE};end`
+    );
+  }
+
+  function openApp() {
+
+    // iOS → Universal Links
+    if (isIOS) {
+
+      window.location.href =
+        buildUniversalLink();
+
+      return;
+    }
+
+    // Android → App Links / Intent
+    if (isAndroid) {
+
+      window.location.href =
+        buildAndroidIntentLink();
+
+      return;
+    }
+
+    // Desktop
+    showFallback();
+  }
+
+  // Кнопка открытия приложения
+  openAppBtn.onclick = () => {
+
+    openApp();
+  };
+
+  // Кнопка стора
+  storeBtn.onclick = () => {
+
+    if (isIOS) {
+
+      window.location.href =
+        IOS_APP_STORE_URL;
+
+    } else if (isAndroid) {
+
+      window.location.href =
+        ANDROID_PLAY_URL;
+    }
+  };
+
+  // Автооткрытие
+  // Для iOS universal links работают нормально
+  // без Safari-блокировки
+  setTimeout(() => {
+
+    openApp();
+
+  }, 300);
+
+  // Если приложение не открылось —
+  // показываем fallback
+  setTimeout(() => {
+
+    if (!document.hidden) {
+
+      showFallback();
+    }
+
+  }, 2500);
+
+})();
+</script>
+
+</body>
+</html>
