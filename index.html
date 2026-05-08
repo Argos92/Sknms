@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <title>SplitPay — Открываю событие...</title>
 
   <style>
     body {
-      font-family: -apple-system, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
       background: #f5f5f5;
       display: flex;
       justify-content: center;
@@ -18,17 +19,18 @@
 
     .container {
       text-align: center;
-      padding: 20px;
+      padding: 24px;
+      max-width: 420px;
     }
 
     .spinner {
       border: 3px solid #f3f3f3;
-      border-top: 3px solid #3498db;
+      border-top: 3px solid #007bff;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       animation: spin 1s linear infinite;
-      margin: 20px auto;
+      margin: 24px auto;
     }
 
     @keyframes spin {
@@ -41,137 +43,198 @@
       background: #007bff;
       color: #fff;
       border: none;
-      padding: 12px 24px;
+      padding: 14px 22px;
       font-size: 16px;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
-      margin: 8px;
+      width: 100%;
+      margin-top: 12px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .hint {
+      color: #666;
+      font-size: 14px;
+      margin-top: 16px;
+      line-height: 1.5;
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <h1>SplitPay</h1>
-    <p>Открываю общее событие...</p>
 
-    <div class="spinner"></div>
+<div class="container">
 
-    <div id="store-buttons" style="display:none; margin-top:20px">
-      <p>Установите приложение, чтобы открыть событие:</p>
+  <h1>SplitPay</h1>
 
-      <button class="btn" id="ios-btn">
-        📱 App Store
-      </button>
+  <p>Открываю событие...</p>
 
-      <button class="btn" id="android-btn">
-        🤖 Google Play
-      </button>
+  <div class="spinner" id="spinner"></div>
+
+  <div id="fallback" class="hidden">
+
+    <p>Если приложение не открылось:</p>
+
+    <button class="btn" id="open-app-btn">
+      Открыть приложение
+    </button>
+
+    <button class="btn" id="store-btn">
+      Установить приложение
+    </button>
+
+    <div class="hint">
+      Если приложение установлено, нажмите
+      «Открыть приложение».
     </div>
+
   </div>
 
-  <script>
-    (function () {
+</div>
 
-      // ═══ НАСТРОЙКИ ═══
-      const APP_SCHEME = 'sknms';
-      const APP_HOST = 'sknms.ru';
+<script>
+(function () {
 
-      const IOS_STORE_URL =
-        'https://testflight.apple.com/join/Qvj8xae2';
+  // ════════════════════════════════
+  // НАСТРОЙКИ
+  // ════════════════════════════════
 
-      const ANDROID_STORE_URL =
-        'https://play.google.com/store/apps/details?id=com.yourcompany.splitpay';
-      // ════════════════
+  const IOS_APP_STORE_URL =
+    'https://testflight.apple.com/join/Qvj8xae2';
 
-      const isIOS =
-        /iPad|iPhone|iPod/.test(navigator.userAgent) &&
-        !window.MSStream;
+  const ANDROID_PLAY_URL =
+    'https://play.google.com/store/apps/details?id=com.yourcompany.splitpay';
 
-      const isAndroid =
-        /android/i.test(navigator.userAgent);
+  const ANDROID_PACKAGE =
+    'com.yourcompany.splitpay';
 
-      document.getElementById('ios-btn').onclick = () => {
-        window.location.href = IOS_STORE_URL;
-      };
+  const DOMAIN =
+    'https://sknms.ru';
 
-      document.getElementById('android-btn').onclick = () => {
-        window.location.href = ANDROID_STORE_URL;
-      };
+  // ════════════════════════════════
 
-      function showStoreButtons() {
-        document.querySelector('.spinner').style.display = 'none';
+  const isIOS =
+    /iPad|iPhone|iPod/.test(navigator.userAgent) &&
+    !window.MSStream;
 
-        document.getElementById('store-buttons').style.display = 'block';
-      }
+  const isAndroid =
+    /android/i.test(navigator.userAgent);
 
-      function buildDeepLink() {
+  const spinner =
+    document.getElementById('spinner');
 
-        // Например:
-        // /event
-        const path = window.location.pathname;
+  const fallback =
+    document.getElementById('fallback');
 
-        // Например:
-        // ?id=abc123
-        const params = new URLSearchParams(window.location.search);
+  const openAppBtn =
+    document.getElementById('open-app-btn');
 
-        // Получаем id
-        const eventId = params.get('id');
+  const storeBtn =
+    document.getElementById('store-btn');
 
-        // Формируем:
-        // sknms://sknms.ru/event/abc123
-        let deepLink =
-          `${APP_SCHEME}://${APP_HOST}${path}`;
+  function showFallback() {
 
-        if (eventId) {
-          deepLink += `/${eventId}`;
-        }
+    spinner.style.display = 'none';
 
-        return deepLink;
-      }
+    fallback.classList.remove('hidden');
+  }
 
-      function tryOpenApp() {
+  function getEventId() {
 
-        const deepLink = buildDeepLink();
+    const params =
+      new URLSearchParams(window.location.search);
 
-        console.log('Deep link:', deepLink);
+    return params.get('id');
+  }
 
-        if (isIOS) {
+  function buildUniversalLink() {
 
-          window.location.href = deepLink;
+    const eventId = getEventId();
 
-          setTimeout(showStoreButtons, 2500);
+    return `${DOMAIN}/event/${eventId}`;
+  }
 
-        } else if (isAndroid) {
+  function buildAndroidIntentLink() {
 
-          const iframe = document.createElement('iframe');
+    const eventId = getEventId();
 
-          iframe.style.display = 'none';
-          iframe.src = deepLink;
+    return (
+      `intent://event/${eventId}` +
+      `#Intent;scheme=https;` +
+      `package=${ANDROID_PACKAGE};end`
+    );
+  }
 
-          document.body.appendChild(iframe);
+  function openApp() {
 
-          setTimeout(() => {
+    // iOS → Universal Links
+    if (isIOS) {
 
-            if (!document.hidden) {
-              showStoreButtons();
-            }
+      window.location.href =
+        buildUniversalLink();
 
-            iframe.remove();
+      return;
+    }
 
-          }, 2500);
+    // Android → App Links / Intent
+    if (isAndroid) {
 
-        } else {
+      window.location.href =
+        buildAndroidIntentLink();
 
-          // Desktop
-          showStoreButtons();
+      return;
+    }
 
-        }
-      }
+    // Desktop
+    showFallback();
+  }
 
-      setTimeout(tryOpenApp, 1200);
+  // Кнопка открытия приложения
+  openAppBtn.onclick = () => {
 
-    })();
-  </script>
+    openApp();
+  };
+
+  // Кнопка стора
+  storeBtn.onclick = () => {
+
+    if (isIOS) {
+
+      window.location.href =
+        IOS_APP_STORE_URL;
+
+    } else if (isAndroid) {
+
+      window.location.href =
+        ANDROID_PLAY_URL;
+    }
+  };
+
+  // Автооткрытие
+  // Для iOS universal links работают нормально
+  // без Safari-блокировки
+  setTimeout(() => {
+
+    openApp();
+
+  }, 300);
+
+  // Если приложение не открылось —
+  // показываем fallback
+  setTimeout(() => {
+
+    if (!document.hidden) {
+
+      showFallback();
+    }
+
+  }, 2500);
+
+})();
+</script>
+
 </body>
 </html>
