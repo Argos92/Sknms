@@ -1,0 +1,18 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": ["58TUZDJ3K7.com.mycompany.scnms"],
+        "components": [
+          {
+            "/": "/redirect.html"
+          }
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": ["58TUZDJ3K7.com.mycompany.scnms"]
+  }
+}
