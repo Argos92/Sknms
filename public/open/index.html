@@ -199,8 +199,8 @@
 
     // ===== PARSE EVENT ID =====
 
-    const pathParts = window.location.pathname.split("/");
-    const eventId = pathParts[pathParts.length - 1];
+    const params = new URLSearchParams(window.location.search);
+    const eventId = params.get("event");
 
     document.getElementById("eventId").textContent = eventId;
 
