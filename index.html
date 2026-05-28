@@ -1,240 +1,286 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <title>SplitPay — Открываю событие...</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Скинемся — Открытие события</title>
 
   <style>
+    :root {
+      --bg: #efeff4;
+      --card: #ffffff;
+      --text: #232323;
+      --muted: #8f8f98;
+      --purple: #b45cff;
+      --navy: #07164d;
+      --danger: #ff5c73;
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #f5f5f5;
+      font-family: Inter, system-ui, sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
       display: flex;
       justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
+      padding: 18px;
+      color: var(--text);
     }
 
-    .container {
-      text-align: center;
-      padding: 24px;
-      max-width: 420px;
-    }
-
-    .spinner {
-      border: 3px solid #f3f3f3;
-      border-top: 3px solid #007bff;
-      border-radius: 50%;
-      width: 42px;
-      height: 42px;
-      animation: spin 1s linear infinite;
-      margin: 24px auto;
-    }
-
-    @keyframes spin {
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-
-    .btn {
-      background: #007bff;
-      color: #fff;
-      border: none;
-      padding: 14px 22px;
-      font-size: 16px;
-      border-radius: 10px;
-      cursor: pointer;
+    .phone {
       width: 100%;
-      margin-top: 12px;
+      max-width: 390px;
     }
 
-    .hidden {
-      display: none;
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
     }
 
-    .hint {
-      color: #666;
-      font-size: 14px;
-      margin-top: 16px;
+    .back {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,.05);
+      font-size: 20px;
+    }
+
+    .menu {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--purple);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 8px 20px rgba(180,92,255,.35);
+    }
+
+    .title {
+      font-size: 38px;
+      font-weight: 700;
+      line-height: 1.05;
+      margin-bottom: 22px;
+      letter-spacing: -0.03em;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: 0 3px 12px rgba(0,0,0,.04);
+      margin-bottom: 16px;
+    }
+
+    .event-id-label {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .event-id {
+      font-size: 15px;
       line-height: 1.5;
+      word-break: break-all;
+      font-weight: 600;
+    }
+
+    .status {
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(180,92,255,.08);
+      color: #6b33b5;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .open-btn {
+      margin-top: 18px;
+      width: 100%;
+      border: 0;
+      border-radius: 18px;
+      background: var(--navy);
+      color: white;
+      padding: 18px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .store-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .store-btn {
+      background: white;
+      border: 0;
+      border-radius: 16px;
+      padding: 14px;
+      text-align: center;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 600;
+      box-shadow: 0 3px 12px rgba(0,0,0,.04);
+    }
+
+    .bottom-space {
+      height: 32px;
     }
   </style>
 </head>
-
 <body>
 
-<div class="container">
+  <div class="phone">
 
-  <h1>SplitPay</h1>
-
-  <p>Открываю событие...</p>
-
-  <div class="spinner" id="spinner"></div>
-
-  <div id="fallback" class="hidden">
-
-    <p>Если приложение не открылось:</p>
-
-    <button class="btn" id="open-app-btn">
-      Открыть приложение
-    </button>
-
-    <button class="btn" id="store-btn">
-      Установить приложение
-    </button>
-
-    <div class="hint">
-      Если приложение установлено, нажмите
-      «Открыть приложение».
+    <div class="top">
+      <div class="back">‹</div>
+      <div class="menu">≡</div>
     </div>
+
+    <div class="title">
+      Открытие<br />
+      события
+    </div>
+
+    <div class="card">
+      <div class="event-id-label">
+        ID события
+      </div>
+
+      <div class="event-id" id="eventId">
+        —
+      </div>
+
+      <div class="status" id="status">
+        Проверяем установлено ли приложение…
+      </div>
+
+      <button class="open-btn" id="openBtn">
+        Открыть в приложении
+      </button>
+    </div>
+
+    <div class="store-buttons">
+      <a class="store-btn" id="appStoreBtn" href="#">
+        App Store
+      </a>
+
+      <a class="store-btn" id="googlePlayBtn" href="#">
+        Google Play
+      </a>
+    </div>
+
+    <div class="bottom-space"></div>
 
   </div>
 
-</div>
+  <script>
+    // ===== CONFIG =====
 
-<script>
-(function () {
+    const APP_STORE_ID = "1234567890";
+    const ANDROID_PACKAGE = "com.sknms.app";
 
-  // ════════════════════════════════
-  // НАСТРОЙКИ
-  // ════════════════════════════════
+    // ===== PARSE EVENT ID =====
 
-  const IOS_APP_STORE_URL =
-    'https://testflight.apple.com/join/Qvj8xae2';
+    const pathParts = window.location.pathname.split("/");
+    const eventId = pathParts[pathParts.length - 1];
 
-  const ANDROID_PLAY_URL =
-    'https://play.google.com/store/apps/details?id=com.yourcompany.splitpay';
+    document.getElementById("eventId").textContent = eventId;
 
-  const ANDROID_PACKAGE =
-    'com.yourcompany.splitpay';
+    // ===== LINKS =====
 
-  const DOMAIN =
-    'https://sknms.ru';
+    const universalLink = window.location.href;
 
-  // ════════════════════════════════
+    const appStoreLink =
+      `https://apps.apple.com/app/id${APP_STORE_ID}`;
 
-  const isIOS =
-    /iPad|iPhone|iPod/.test(navigator.userAgent) &&
-    !window.MSStream;
+    const playStoreLink =
+      `https://play.google.com/store/apps/details?id=${ANDROID_PACKAGE}`;
 
-  const isAndroid =
-    /android/i.test(navigator.userAgent);
+    // ===== ELEMENTS =====
 
-  const spinner =
-    document.getElementById('spinner');
+    const openBtn = document.getElementById("openBtn");
+    const status = document.getElementById("status");
 
-  const fallback =
-    document.getElementById('fallback');
+    document.getElementById("appStoreBtn").href = appStoreLink;
+    document.getElementById("googlePlayBtn").href = playStoreLink;
 
-  const openAppBtn =
-    document.getElementById('open-app-btn');
+    // ===== DEVICE DETECTION =====
 
-  const storeBtn =
-    document.getElementById('store-btn');
+    const isIOS =
+      /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === "MacIntel" &&
+       navigator.maxTouchPoints > 1);
 
-  function showFallback() {
+    const isAndroid =
+      /Android/i.test(navigator.userAgent);
 
-    spinner.style.display = 'none';
+    // ===== OPEN APP =====
 
-    fallback.classList.remove('hidden');
-  }
+    function openIOS() {
+      window.location.href = universalLink;
 
-  function getEventId() {
-
-    const params =
-      new URLSearchParams(window.location.search);
-
-    return params.get('id');
-  }
-
-  function buildUniversalLink() {
-
-    const eventId = getEventId();
-
-    return `${DOMAIN}/event/${eventId}`;
-  }
-
-  function buildAndroidIntentLink() {
-
-    const eventId = getEventId();
-
-    return (
-      `intent://event/${eventId}` +
-      `#Intent;scheme=https;` +
-      `package=${ANDROID_PACKAGE};end`
-    );
-  }
-
-  function openApp() {
-
-    // iOS → Universal Links
-    if (isIOS) {
-
-      window.location.href =
-        buildUniversalLink();
-
-      return;
+      setTimeout(() => {
+        if (document.visibilityState === "visible") {
+          window.location.href = appStoreLink;
+        }
+      }, 1500);
     }
 
-    // Android → App Links / Intent
-    if (isAndroid) {
+    function openAndroid() {
+      const intent =
+        `intent://${window.location.host}${window.location.pathname}` +
+        `#Intent;scheme=https;package=${ANDROID_PACKAGE};` +
+        `S.browser_fallback_url=${encodeURIComponent(playStoreLink)};end`;
 
-      window.location.href =
-        buildAndroidIntentLink();
-
-      return;
+      window.location.href = intent;
     }
 
-    // Desktop
-    showFallback();
-  }
-
-  // Кнопка открытия приложения
-  openAppBtn.onclick = () => {
-
-    openApp();
-  };
-
-  // Кнопка стора
-  storeBtn.onclick = () => {
+    // ===== UI =====
 
     if (isIOS) {
+      status.innerHTML =
+        "iPhone/iPad обнаружен.<br>Пытаемся открыть приложение…";
 
-      window.location.href =
-        IOS_APP_STORE_URL;
+      openBtn.onclick = openIOS;
 
-    } else if (isAndroid) {
-
-      window.location.href =
-        ANDROID_PLAY_URL;
+      setTimeout(openIOS, 400);
     }
-  };
+    else if (isAndroid) {
+      status.innerHTML =
+        "Android обнаружен.<br>Пытаемся открыть приложение…";
 
-  // Автооткрытие
-  // Для iOS universal links работают нормально
-  // без Safari-блокировки
-  setTimeout(() => {
+      openBtn.onclick = openAndroid;
 
-    openApp();
-
-  }, 300);
-
-  // Если приложение не открылось —
-  // показываем fallback
-  setTimeout(() => {
-
-    if (!document.hidden) {
-
-      showFallback();
+      setTimeout(openAndroid, 400);
     }
+    else {
+      status.innerHTML =
+        "Откройте ссылку с мобильного устройства.";
 
-  }, 2500);
-
-})();
-</script>
+      openBtn.onclick = () => {
+        window.location.href = universalLink;
+      };
+    }
+  </script>
 
 </body>
 </html>
