@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Скинемся — Открытие события</title>
+
+  <style>
+    :root {
+      --bg: #efeff4;
+      --card: #ffffff;
+      --text: #232323;
+      --muted: #8f8f98;
+      --purple: #b45cff;
+      --navy: #07164d;
+      --danger: #ff5c73;
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Inter, system-ui, sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 18px;
+      color: var(--text);
+    }
+
+    .phone {
+      width: 100%;
+      max-width: 390px;
+    }
+
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .back {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,.05);
+      font-size: 20px;
+    }
+
+    .menu {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--purple);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 8px 20px rgba(180,92,255,.35);
+    }
+
+    .title {
+      font-size: 38px;
+      font-weight: 700;
+      line-height: 1.05;
+      margin-bottom: 22px;
+      letter-spacing: -0.03em;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: 0 3px 12px rgba(0,0,0,.04);
+      margin-bottom: 16px;
+    }
+
+    .event-id-label {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .event-id {
+      font-size: 15px;
+      line-height: 1.5;
+      word-break: break-all;
+      font-weight: 600;
+    }
+
+    .status {
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(180,92,255,.08);
+      color: #6b33b5;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .open-btn {
+      margin-top: 18px;
+      width: 100%;
+      border: 0;
+      border-radius: 18px;
+      background: var(--navy);
+      color: white;
+      padding: 18px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .store-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .store-btn {
+      background: white;
+      border: 0;
+      border-radius: 16px;
+      padding: 14px;
+      text-align: center;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 600;
+      box-shadow: 0 3px 12px rgba(0,0,0,.04);
+    }
+
+    .bottom-space {
+      height: 32px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone">
+
+    <div class="top">
+      <div class="back">‹</div>
+    </div>
+
+    <div class="title">
+      Открытие<br />
+      события
+    </div>
+
+    <div class="card">
+      <div class="event-id-label">
+        ID события
+      </div>
+
+      <div class="event-id" id="eventId">
+        —
+      </div>
+
+      <div class="status" id="status">
+        Проверяем установлено ли приложение…
+      </div>
+
+      <button class="open-btn" id="openBtn">
+        Открыть в приложении
+      </button>
+    </div>
+
+    <div class="store-buttons">
+      <a class="store-btn" id="appStoreBtn" href="#">
+        App Store
+      </a>
+
+      <a class="store-btn" id="googlePlayBtn" href="#">
+        Google Play
+      </a>
+    </div>
+
+    <div class="bottom-space"></div>
+
+  </div>
+
+  <script>
+    // ===== CONFIG =====
+
+    const APP_STORE_ID = "6762391510";
+    const ANDROID_PACKAGE = "com.sknms.app";
+
+    // ===== PARSE EVENT ID =====
+
+    const pathParts = window.location.pathname.split("/");
+    const eventId = pathParts[pathParts.length - 1];
+
+    document.getElementById("eventId").textContent = eventId;
+
+    // ===== LINKS =====
+
+    const universalLink =  `https://sknms.ru/event/${eventId}`;
+
+    const appStoreLink =
+      `https://apps.apple.com/app/id${APP_STORE_ID}`;
+
+    const playStoreLink =
+      `https://play.google.com/store/apps/details?id=${ANDROID_PACKAGE}`;
+
+    // ===== ELEMENTS =====
+
+    const openBtn = document.getElementById("openBtn");
+    const status = document.getElementById("status");
+
+    document.getElementById("appStoreBtn").href = appStoreLink;
+    document.getElementById("googlePlayBtn").href = playStoreLink;
+
+    // ===== DEVICE DETECTION =====
+
+    const isIOS =
+      /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === "MacIntel" &&
+       navigator.maxTouchPoints > 1);
+
+    const isAndroid =
+      /Android/i.test(navigator.userAgent);
+
+    // ===== OPEN APP =====
+
+    function openIOS() {
+      window.location.href = universalLink;
+
+      setTimeout(() => {
+        if (document.visibilityState === "visible") {
+          window.location.href = appStoreLink;
+        }
+      }, 1500);
+    }
+
+    function openAndroid() {
+      const intent =
+        `intent://${window.location.host}${window.location.pathname}` +
+        `#Intent;scheme=https;package=${ANDROID_PACKAGE};` +
+        `S.browser_fallback_url=${encodeURIComponent(playStoreLink)};end`;
+
+      window.location.href = intent;
+    }
+
+    // ===== UI =====
+
+    if (isIOS) {
+      status.innerHTML =
+        "iPhone/iPad обнаружен.<br>Пытаемся открыть приложение…";
+
+      openBtn.onclick = openIOS;
+
+      setTimeout(openIOS, 400);
+    }
+    else if (isAndroid) {
+      status.innerHTML =
+        "Android обнаружен.<br>Пытаемся открыть приложение…";
+
+      openBtn.onclick = openAndroid;
+
+      setTimeout(openAndroid, 400);
+    }
+    else {
+      status.innerHTML =
+        "Откройте ссылку с мобильного устройства.";
+
+      openBtn.onclick = () => {
+        window.location.href = universalLink;
+      };
+    }
+  </script>
+
+</body>
+</html>
