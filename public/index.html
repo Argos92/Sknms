@@ -1,285 +1,204 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Скинемся — Открытие события</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    :root {
-      --bg: #efeff4;
-      --card: #ffffff;
-      --text: #232323;
-      --muted: #8f8f98;
-      --purple: #b45cff;
-      --navy: #07164d;
-      --danger: #ff5c73;
-      --radius: 22px;
-    }
+<title>Скинемся</title>
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<style>
+:root{
+    --primary:#c86cf6;
+    --primary-dark:#0b1b59;
+    --bg:#f3f4f8;
+    --card:#ffffff;
+    --text:#2c3553;
+}
 
-    body {
-      font-family: Inter, system-ui, sans-serif;
-      background: var(--bg);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      padding: 18px;
-      color: var(--text);
-    }
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+}
 
-    .phone {
-      width: 100%;
-      max-width: 390px;
-    }
+body{
+    background:var(--bg);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+}
 
-    .top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 18px;
-    }
+.card{
+    background:var(--card);
+    width:100%;
+    max-width:420px;
+    border-radius:24px;
+    padding:32px 24px;
+    text-align:center;
+    box-shadow:0 8px 32px rgba(0,0,0,.08);
+}
 
-    .back {
-      width: 38px;
-      height: 38px;
-      border-radius: 14px;
-      background: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 10px rgba(0,0,0,.05);
-      font-size: 20px;
-    }
+.logo{
+    width:80px;
+    height:80px;
+    margin:auto;
+    border-radius:20px;
+    background:#e8f5ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:40px;
+}
 
-    .menu {
-      width: 46px;
-      height: 46px;
-      border-radius: 50%;
-      background: var(--purple);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      box-shadow: 0 8px 20px rgba(180,92,255,.35);
-    }
+h1{
+    color:var(--text);
+    margin-top:20px;
+    font-size:28px;
+}
 
-    .title {
-      font-size: 38px;
-      font-weight: 700;
-      line-height: 1.05;
-      margin-bottom: 22px;
-      letter-spacing: -0.03em;
-    }
+.subtitle{
+    color:#7a8095;
+    margin-top:8px;
+}
 
-    .card {
-      background: var(--card);
-      border-radius: var(--radius);
-      padding: 22px;
-      box-shadow: 0 3px 12px rgba(0,0,0,.04);
-      margin-bottom: 16px;
-    }
+.event-box{
+    margin-top:24px;
+    background:#f7f7fb;
+    padding:16px;
+    border-radius:14px;
+}
 
-    .event-id-label {
-      color: var(--muted);
-      font-size: 13px;
-      margin-bottom: 8px;
-    }
+.event-id{
+    font-size:20px;
+    font-weight:600;
+    color:var(--primary-dark);
+}
 
-    .event-id {
-      font-size: 15px;
-      line-height: 1.5;
-      word-break: break-all;
-      font-weight: 600;
-    }
+.buttons{
+    margin-top:28px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
 
-    .status {
-      margin-top: 18px;
-      padding: 14px;
-      border-radius: 16px;
-      background: rgba(180,92,255,.08);
-      color: #6b33b5;
-      font-size: 14px;
-      line-height: 1.5;
-    }
+.btn{
+    text-decoration:none;
+    padding:16px;
+    border-radius:14px;
+    font-weight:600;
+    display:block;
+}
 
-    .open-btn {
-      margin-top: 18px;
-      width: 100%;
-      border: 0;
-      border-radius: 18px;
-      background: var(--navy);
-      color: white;
-      padding: 18px;
-      font-size: 17px;
-      font-weight: 700;
-      cursor: pointer;
-    }
+.btn-open{
+    background:var(--primary-dark);
+    color:white;
+}
 
-    .store-buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 14px;
-    }
+.btn-appstore{
+    background:var(--primary);
+    color:white;
+}
 
-    .store-btn {
-      background: white;
-      border: 0;
-      border-radius: 16px;
-      padding: 14px;
-      text-align: center;
-      text-decoration: none;
-      color: var(--text);
-      font-weight: 600;
-      box-shadow: 0 3px 12px rgba(0,0,0,.04);
-    }
+.btn-play{
+    border:2px solid var(--primary);
+    color:var(--primary);
+}
 
-    .bottom-space {
-      height: 32px;
-    }
-  </style>
+.footer{
+    margin-top:24px;
+    font-size:12px;
+    color:#999;
+}
+</style>
 </head>
+
 <body>
 
-  <div class="phone">
+<div class="card">
 
-    <div class="top">
-      <div class="back">‹</div>
+    <div class="logo">
+        💸
     </div>
 
-    <div class="title">
-      Открытие<br />
-      события
+    <h1>Скинемся</h1>
+
+    <div class="subtitle">
+        Открытие события
     </div>
 
-    <div class="card">
-      <div class="event-id-label">
-        ID события
-      </div>
-
-      <div class="event-id" id="eventId">
-        —
-      </div>
-
-      <div class="status" id="status">
-        Проверяем установлено ли приложение…
-      </div>
-
-      <button class="open-btn" id="openBtn">
-        Открыть в приложении
-      </button>
+    <div class="event-box">
+        <div>Номер события</div>
+        <div class="event-id" id="eventId">...</div>
     </div>
 
-    <div class="store-buttons">
-      <a class="store-btn" id="appStoreBtn" href="#">
-        App Store
-      </a>
+    <div class="buttons">
 
-      <a class="store-btn" id="googlePlayBtn" href="#">
-        Google Play
-      </a>
+        <a id="openApp"
+           class="btn btn-open"
+           href="#">
+            Открыть приложение
+        </a>
+
+        <a
+           class="btn btn-appstore"
+           href="https://apps.apple.com/app/id6762391510">
+            App Store
+        </a>
+
+        <a
+           class="btn btn-play"
+           href="#">
+            Google Play
+        </a>
+
     </div>
 
-    <div class="bottom-space"></div>
+    <div class="footer">
+        Разделение расходов без лишней математики
+    </div>
 
-  </div>
+</div>
 
-  <script>
-    // ===== CONFIG =====
+<script>
 
-    const APP_STORE_ID = "6762391510";
-    const ANDROID_PACKAGE = "com.sknms.app";
+const path = window.location.pathname;
 
-    // ===== PARSE EVENT ID =====
+/*
+ожидаем
 
-    const pathParts = window.location.pathname.split("/");
-    const eventId = pathParts[pathParts.length - 1];
+/event/abc123
+*/
 
-    document.getElementById("eventId").textContent = eventId;
+let eventId = '';
 
-    // ===== LINKS =====
+const parts = path.split('/');
 
-    const universalLink =  `https://sknms.ru/event/${eventId}`;
+if(parts.length >= 3 && parts[1] === 'event'){
+    eventId = parts[2];
+}
 
-    const appStoreLink =
-      `https://apps.apple.com/app/id${APP_STORE_ID}`;
+document.getElementById('eventId').innerText =
+    eventId || 'Не указан';
 
-    const playStoreLink =
-      `https://play.google.com/store/apps/details?id=${ANDROID_PACKAGE}`;
+const appUrl =
+    `sknms://sknms.ru/event/${eventId}`;
 
-    // ===== ELEMENTS =====
+document
+    .getElementById('openApp')
+    .href = appUrl;
 
-    const openBtn = document.getElementById("openBtn");
-    const status = document.getElementById("status");
+/*
+автопопытка открыть приложение
+*/
 
-    document.getElementById("appStoreBtn").href = appStoreLink;
-    document.getElementById("googlePlayBtn").href = playStoreLink;
+setTimeout(() => {
+    window.location.href = appUrl;
+}, 500);
 
-    // ===== DEVICE DETECTION =====
-
-    const isIOS =
-      /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-      (navigator.platform === "MacIntel" &&
-       navigator.maxTouchPoints > 1);
-
-    const isAndroid =
-      /Android/i.test(navigator.userAgent);
-
-    // ===== OPEN APP =====
-
-    function openIOS() {
-      window.location.href = universalLink;
-
-      setTimeout(() => {
-        if (document.visibilityState === "visible") {
-          window.location.href = appStoreLink;
-        }
-      }, 1500);
-    }
-
-    function openAndroid() {
-      const intent =
-        `intent://${window.location.host}${window.location.pathname}` +
-        `#Intent;scheme=https;package=${ANDROID_PACKAGE};` +
-        `S.browser_fallback_url=${encodeURIComponent(playStoreLink)};end`;
-
-      window.location.href = intent;
-    }
-
-    // ===== UI =====
-
-    if (isIOS) {
-      status.innerHTML =
-        "iPhone/iPad обнаружен.<br>Пытаемся открыть приложение…";
-
-      openBtn.onclick = openIOS;
-
-      setTimeout(openIOS, 400);
-    }
-    else if (isAndroid) {
-      status.innerHTML =
-        "Android обнаружен.<br>Пытаемся открыть приложение…";
-
-      openBtn.onclick = openAndroid;
-
-      setTimeout(openAndroid, 400);
-    }
-    else {
-      status.innerHTML =
-        "Откройте ссылку с мобильного устройства.";
-
-      openBtn.onclick = () => {
-        window.location.href = universalLink;
-      };
-    }
-  </script>
+</script>
 
 </body>
 </html>
