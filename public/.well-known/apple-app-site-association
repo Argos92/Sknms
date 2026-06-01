@@ -1,6 +1,5 @@
 {
   "applinks": {
-    "apps": [],
     "details": [
       {
         "appIDs": [
@@ -8,15 +7,10 @@
         ],
         "components": [
           {
-            "/": "/event/*"
+            "/": "*"
           }
         ]
       }
-    ]
-  },
-  "webcredentials": {
-    "apps": [
-      "58TUZDJ3K7.com.mycompany.scnms"
     ]
   }
 }
