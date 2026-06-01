@@ -1,12 +1,13 @@
 {
-  "rewrites": [
+  "headers": [
     {
-      "source": "/event/(.*)",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/profile/(.*)",
-      "destination": "/index.html"
+      "source": "/.well-known/apple-app-site-association",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        }
+      ]
     }
   ]
 }
