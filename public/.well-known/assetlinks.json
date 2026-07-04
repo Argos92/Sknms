@@ -1,1 +1,14 @@
-
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.mycompany.scnms",
+      "sha256_cert_fingerprints": [
+        "31:13:07:D2:82:8E:E6:58:AB:76:33:3B:C7:06:DA:43:D9:68:C8:71:4E:EC:C7:E6:E3:BA:AE:60:72:45:F9:5C"
+      ]
+    }
+  }
+]
